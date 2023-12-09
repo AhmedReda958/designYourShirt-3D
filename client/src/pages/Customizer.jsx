@@ -36,7 +36,7 @@ const Customizer = () => {
         return <ColorPicker />;
         break;
       case "filepicker":
-        return <FilePicker />;
+        return <FilePicker file={File} setFile={setFile} />;
         break;
       case "aipicker":
         return <AIPicker />;
@@ -46,6 +46,47 @@ const Customizer = () => {
         return null;
         break;
     }
+  };
+
+  const handelDecals = (type, result) => {
+    const decalType = DecalTypes[type];
+    state[decalType.stateProperty] = result;
+
+    if (!ActiveFilterTab[decalType.filterTab]) {
+      handleActiveFilterTab(decalType.filterTab);
+    }
+  };
+
+  const handleActiveFilterTab = (tabName) => {
+    switch (tabName) {
+      case "logoShirt":
+        state.isLogoTexture = !ActiveFilterTab[tabName];
+        break;
+      case "stylishShirt":
+        state.isFullTexture = !ActiveFilterTab[tabName];
+        break;
+
+      default:
+        state.isLogoTexture = true;
+        state.isFullTexture = true;
+
+        break;
+    }
+
+    // after setting the state, activeFilterTab is updated
+    setActiveFilterTab((prevState) => {
+      return {
+        ...prevState,
+        [tabName]: !prevState[tabName],
+      };
+    });
+  };
+
+  const readFile = (type) => {
+    reader(File).then((result) => {
+      handelDecals(type, result);
+      setActiveEditorTab("");
+    });
   };
 
   return (
@@ -97,7 +138,9 @@ const Customizer = () => {
                 tab={tab}
                 isFilterTab
                 isActiveTab
-                handleClick={() => {}}
+                handleClick={() => {
+                  handleActiveFilterTab(tab.name);
+                }}
               />
             ))}
           </motion.div>
