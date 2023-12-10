@@ -41,10 +41,10 @@ const Customizer = () => {
       case "aipicker":
         return (
           <AIPicker
-            prompt={prompt}
+            prompt={Prompt}
             setPrompt={setPrompt}
             generatingImg={GeneratingImg}
-            handelSubmit={handelSubmit}
+            handleSubmit={handleSubmit}
           />
         );
         break;
@@ -55,11 +55,26 @@ const Customizer = () => {
     }
   };
 
-  const handelSubmit = async (type) => {
-    if (!prompt) return alert("please enter a prompt");
+  const handleSubmit = async (type) => {
+    if (!Prompt) return alert("please enter a Prompt");
 
     try {
       // call out backend to generate an ai image
+      setGeneratingImg(true);
+
+      const response = await fetch("http://localhost:8000/api/v1/dalle/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: Prompt,
+        }),
+      });
+
+      const data = await response.json();
+
+      handelDecals(type, `data:image/png;base64,${data.image}`);
     } catch (error) {
       alert(error);
     } finally {
