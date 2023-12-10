@@ -19,7 +19,7 @@ import { fadeAnimation, slideAnimation } from "../config/motion";
 const Customizer = () => {
   const snap = useSnapshot(state);
 
-  const [Pile, setFile] = useState("");
+  const [File, setFile] = useState("");
   const [Prompt, setPrompt] = useState("");
   const [GeneratingImg, setGeneratingImg] = useState(false);
 
@@ -36,7 +36,7 @@ const Customizer = () => {
         return <ColorPicker />;
         break;
       case "filepicker":
-        return <FilePicker file={File} setFile={setFile} />;
+        return <FilePicker file={File} setFile={setFile} readFile={readFile} />;
         break;
       case "aipicker":
         return <AIPicker />;
@@ -68,7 +68,7 @@ const Customizer = () => {
 
       default:
         state.isLogoTexture = true;
-        state.isFullTexture = true;
+        state.isFullTexture = false;
 
         break;
     }
@@ -137,7 +137,7 @@ const Customizer = () => {
                 key={tab.name}
                 tab={tab}
                 isFilterTab
-                isActiveTab
+                isActiveTab={ActiveFilterTab[tab.name]}
                 handleClick={() => {
                   handleActiveFilterTab(tab.name);
                 }}
