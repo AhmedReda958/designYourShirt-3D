@@ -39,12 +39,31 @@ const Customizer = () => {
         return <FilePicker file={File} setFile={setFile} readFile={readFile} />;
         break;
       case "aipicker":
-        return <AIPicker />;
+        return (
+          <AIPicker
+            prompt={prompt}
+            setPrompt={setPrompt}
+            generatingImg={GeneratingImg}
+            handelSubmit={handelSubmit}
+          />
+        );
         break;
 
       default:
         return null;
         break;
+    }
+  };
+
+  const handelSubmit = async (type) => {
+    if (!prompt) return alert("please enter a prompt");
+
+    try {
+      // call out backend to generate an ai image
+    } catch (error) {
+      alert(error);
+    } finally {
+      setGeneratingImg(false);
     }
   };
 
